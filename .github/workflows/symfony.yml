@@ -33,6 +33,8 @@ jobs:
       run: |
         mkdir -p data
         touch data/database.sqlite
+    - name: Create cache warmup
+      run: php bin/console cache:warmup --env=test
     - name: Check PHPStan
       run : vendor/bin/phpstan analyse
     - name: Migrate Database
