@@ -1,7 +1,7 @@
 parameters:
     level: 6
     symfony:
-        containerXmlPath: var/cache/test/App_KernelDevDebugContainer.xml
+        containerXmlPath: var/cache/test/App_KernelTestDebugContainer.xml
     paths:
         - bin/
         - config/

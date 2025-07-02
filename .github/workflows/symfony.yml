@@ -37,10 +37,6 @@ jobs:
         touch data/database.sqlite
     - name: Create cache warmup
       run: php bin/console cache:warmup --env=test
-    - name: check folder
-      run: |
-        pwd
-        ls -la var/cache/test
     - name: Check PHPStan
       run : vendor/bin/phpstan analyse --configuration=phpstan.test.dist.neon
     - name: Migrate Database
