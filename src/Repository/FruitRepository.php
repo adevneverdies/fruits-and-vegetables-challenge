@@ -23,7 +23,7 @@ class FruitRepository extends ServiceEntityRepository implements RepositoryInter
 
     /**
      * Filter fruits by name
-     * @return Fruit[] Returns an array of Fruit objects
+     * @return EntityInterface[]|Fruit[] Returns an array of Fruit objects
      */
     public function filterByName(string $name): array
     {

@@ -57,14 +57,58 @@ class DatabaseStorage implements StorageInterface
     /**
      * @throws \RuntimeException
      */
-    public function delete(EntityInterface $entity): bool
+    public function delete(EntityInterface $entity, int $id): bool
     {
-        if (is_null($entity->getId())) {
-            throw new \RuntimeException('Entity does not have an ID, cannot delete.');
+        $entity = $this->getById($entity, $id);
+
+        if ($entity === null) {
+            throw new \RuntimeException('Entity not found for deletion.');
         }
 
         $this->entityManager->remove($entity);
         $this->entityManager->flush();
         return true;
+    }
+
+    /**
+     * @return EntityInterface[]
+     * @throws \RuntimeException
+     */
+    public function all(EntityInterface $entity): array
+    {
+        $repository = $this->entityManager->getRepository($entity::class);
+
+        if (! $repository instanceof RepositoryInterface) {
+            throw new \RuntimeException('Repository does not implement RepositoryInterface.');
+        }
+
+        return $repository->findAll();
+    }
+
+    /**
+     * @throws \RuntimeException
+     */
+    public function getById(EntityInterface $entity, int $id): ?EntityInterface {
+        $repository = $this->entityManager->getRepository($entity::class);
+
+        if (! $repository instanceof RepositoryInterface) {
+            throw new \RuntimeException('Repository does not implement RepositoryInterface.');
+        }
+
+        return $repository->find($id);
+    }
+
+    /**
+     * @return EntityInterface[]
+     * @throws \RuntimeException
+     */
+    public function filterByName(EntityInterface $entity, string $name): array {
+        $repository = $this->entityManager->getRepository($entity::class);
+
+        if (! $repository instanceof RepositoryInterface) {
+            throw new \RuntimeException('Repository does not implement RepositoryInterface.');
+        }
+
+        return $repository->filterByName($name);
     }
 }

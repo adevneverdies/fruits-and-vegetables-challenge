@@ -10,4 +10,9 @@ interface RepositoryInterface
     public function create(DTOInterface $dto): EntityInterface;
 
     public function update(EntityInterface $entity, DTOInterface $dto): EntityInterface;
+
+    /**
+     * @return EntityInterface[]
+     */
+    public function filterByName(string $name): array;
 }
