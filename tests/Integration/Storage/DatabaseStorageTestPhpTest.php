@@ -6,32 +6,10 @@ namespace App\Tests\Integration\Storage;
 
 use App\DTO\FruitDTO;
 use App\Entity\Fruit;
-use App\Storage\DatabaseStorage;
-use App\Tests\Integration\Fixture\DataFixture;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Zenstruck\Foundry\Test\Factories;
-use Zenstruck\Foundry\Test\ResetDatabase;
+use App\Tests\Integration\IntegrationTestCase;
 
-class DatabaseStorageTestPhpTest extends KernelTestCase
+class DatabaseStorageTestPhpTest extends IntegrationTestCase
 {
-    use ResetDatabase; use Factories;
-
-    private ?EntityManagerInterface $entityManager;
-
-    private DatabaseStorage $databaseStorage;
-
-    public function setUp(): void
-    {
-        self::bootKernel();
-
-        $this->entityManager = static::getContainer()->get(EntityManagerInterface::class);
-        $this->databaseStorage = new DatabaseStorage($this->entityManager);
-
-        $fixture = new DataFixture();
-        $fixture->load($this->entityManager);
-    }
-
     public function testSave(): void
     {
 
@@ -55,13 +33,5 @@ class DatabaseStorageTestPhpTest extends KernelTestCase
 
         $updatedFruit = $fruitRepository->findOneBy(['name' => 'Apple']);
         $this->assertEquals(20.0, $updatedFruit->getQuantity());
-    }
-
-    public function tearDown(): void
-    {
-        parent::tearDown();
-
-        $this->entityManager->close();
-        $this->entityManager = null; // Avoid memory leaks
     }
 }

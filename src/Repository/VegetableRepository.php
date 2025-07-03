@@ -14,7 +14,7 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * @extends ServiceEntityRepository<Vegetable>
  */
-class VegetableRepository extends ServiceEntityRepository
+class VegetableRepository extends ServiceEntityRepository implements RepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -23,7 +23,7 @@ class VegetableRepository extends ServiceEntityRepository
 
     /**
      * Filter fruits by name
-     * @return Vegetable[] Returns an array of Vegetable objects
+     * @return EntityInterface[]|Vegetable[] Returns an array of Vegetable objects
      */
     public function filterByName(string $name): array
     {

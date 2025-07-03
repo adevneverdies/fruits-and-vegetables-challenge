@@ -16,7 +16,7 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * @extends ServiceEntityRepository<Product>
  */
-class ProductRepository extends ServiceEntityRepository
+class ProductRepository extends ServiceEntityRepository implements RepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -24,7 +24,7 @@ class ProductRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return Array<Vegetable|Fruit> Returns an array of Vegetable or Fruit objects
+     * @return EntityInterface[]|Array<Vegetable|Fruit> Returns an array of Vegetable or Fruit objects
      */
     public function filterByName(string $name): array
     {

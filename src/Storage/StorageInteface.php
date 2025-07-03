@@ -22,5 +22,22 @@ interface StorageInterface
     /**
      * @throws \RuntimeException
      */
-    public function delete(EntityInterface $entity): bool;
+    public function delete(EntityInterface $entity, int $id): bool;
+
+    /**
+     * @return EntityInterface[]
+     * @throws \RuntimeException
+     */
+    public function all(EntityInterface $entity): array;
+
+    /**
+     * @throws \RuntimeException
+     */
+    public function getById(EntityInterface $entity, int $id): ?EntityInterface;
+
+    /**
+     * @return EntityInterface[]
+     * @throws \RuntimeException
+     */
+    public function filterByName(EntityInterface $entity, string $name): array;
 }
