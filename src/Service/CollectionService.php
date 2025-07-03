@@ -14,6 +14,8 @@ use App\Entity\EntityInterface;
 use App\Entity\Fruit;
 use App\Entity\Product;
 use App\Entity\Vegetable;
+use App\Enum\ProductEnum;
+use App\Util\FileReader\FileReaderFactory;
 
 class CollectionService
 {
@@ -136,5 +138,48 @@ class CollectionService
     public function getVegetableById(int $id): ?EntityInterface
     {
         return $this->vegetableCollection->getById($id);
+    }
+
+    /**
+     * @return array<EntityInterface|Product>
+     * @throws \RuntimeException|\JsonException|\InvalidArgumentException
+     */
+    public function addFromFile(string $filepath, string $fileType = 'json'): array {
+        $reader = FileReaderFactory::create($fileType);
+        $readData = $reader->read($filepath);
+        $listDto = [];
+        foreach ($readData as $data) {
+            if (! isset($data['type'])) {
+                throw new \RuntimeException('Type is missing.');
+            }
+
+            $type = ProductEnum::tryFrom($data['type']);
+
+            if (! $type ) {
+                throw new \InvalidArgumentException('Type is not valid: ' . $data['type']);
+            }
+
+            $dtoClass = ($type === ProductEnum::FRUIT) ? FruitDTO::class : VegetableDTO::class;
+
+            $dto = new $dtoClass(
+                $data['name'] ?? '',
+                $data['quantity'] ?? 0,
+                $data['unit'] ?? 'g'
+            );
+
+            $errors = $dto->validate();
+            if (count($errors) > 0) {
+                throw new \InvalidArgumentException('errors: ' . json_encode($errors));
+            }
+
+            $dto->convertUnitToGrams();
+            $listDto[] = $dto;
+        }
+
+        foreach($listDto as $dto) {
+            $this->addProduct($dto);
+        }
+
+        return $this->listProducts();
     }
 }
