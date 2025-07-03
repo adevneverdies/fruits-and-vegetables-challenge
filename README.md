@@ -30,34 +30,17 @@ or
 * Your code should be tested
 * We don't care how you handle data persistence, no bonus points for having a complex method
 
-## When you are finished
-* Please upload your code to a public git repository (i.e. GitHub, Gitlab)
 
-## 🐳 Docker image
-Optional. Just here if you want to run it isolated.
+### 🛠️ Using the Makefile
 
-### 📥 Pulling image
-```bash
-docker pull tturkowski/fruits-and-vegetables
-```
+A `Makefile` is provided to simplify common development tasks. Here are some useful commands (Note: it uses Docker , Docker compose):
 
-### 🧱 Building image
-```bash
-docker build -t tturkowski/fruits-and-vegetables -f docker/Dockerfile .
-```
+- **Start Environment:**
+  ```sh
+  make start
+  ```
 
-### 🏃‍♂️ Running container
-```bash
-docker run -it -w/app -v$(pwd):/app tturkowski/fruits-and-vegetables sh 
-```
-
-### 🛂 Running tests
-```bash
-docker run -it -w/app -v$(pwd):/app tturkowski/fruits-and-vegetables bin/phpunit
-```
-
-### ⌨️ Run development server
-```bash
-docker run -it -w/app -v$(pwd):/app -p8080:8080 tturkowski/fruits-and-vegetables php -S 0.0.0.0:8080 -t /app/public
-# Open http://127.0.0.1:8080 in your browser
-```
+- **Run tests:**
+  ```sh
+  make test
+  ```
