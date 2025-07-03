@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\InheritanceType("SINGLE_TABLE")]
 #[ORM\DiscriminatorColumn(name: "type", type: "string")]
 #[ORM\DiscriminatorMap(["fruit" => Fruit::class, "vegetable" => Vegetable::class])]
-abstract class Product implements EntityInterface
+class Product implements EntityInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -69,5 +69,24 @@ abstract class Product implements EntityInterface
     {
         $this->unit = $unit;
         return $this;
+    }
+
+    public function getType(): string
+    {
+        return ($this instanceof Fruit) ? 'fruit' : 'vegetable';
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'quantity' => $this->getQuantity(),
+            'unit' => $this->getUnit(),
+            'type' => $this->getType(),
+        ];
     }
 }

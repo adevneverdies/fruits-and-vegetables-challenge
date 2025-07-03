@@ -65,4 +65,26 @@ class FruitCollection implements CollectionInterface
         $this->collection = $this->storage->all(new Fruit());
         return $this->collection;
     }
+
+    /**
+     * @throws \RuntimeException
+     * @return EntityInterface[]
+     */
+    public function filterByName(string $name): array {
+        $filtered = $this->storage->filterByName(new Fruit(), $name);
+        return $filtered;
+    }
+
+    /**
+     * @throws \RuntimeException
+     */
+    public function getById(int $id): ?EntityInterface {
+        $entity = $this->storage->getById(new Fruit(), $id);
+
+        if ($entity === null) {
+            return null;
+        }
+
+        return $entity;
+    }
 }

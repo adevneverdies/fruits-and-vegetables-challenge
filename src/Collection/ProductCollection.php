@@ -5,15 +5,18 @@ declare(strict_types=1);
 namespace App\Collection;
 
 use App\DTO\DTOInterface;
+use App\DTO\FruitDTO;
 use App\DTO\VegetableDTO;
 use App\Entity\EntityInterface;
+use App\Entity\Fruit;
+use App\Entity\Product;
 use App\Entity\Vegetable;
 use App\Storage\DatabaseStorage;
 
-class VegetableCollection implements CollectionInterface
+class ProductCollection implements CollectionInterface
 {
     /**
-     * @var EntityInterface[]|Vegetable[]
+     * @var EntityInterface[]|Product[]
      */
     public array $collection = [];
 
@@ -21,7 +24,7 @@ class VegetableCollection implements CollectionInterface
         private DatabaseStorage $storage
     )
     {
-        $this->collection = $this->storage->all(new Vegetable());
+        $this->collection = $this->storage->all(new Product());
     }
 
     /**
@@ -29,11 +32,13 @@ class VegetableCollection implements CollectionInterface
      */
     public function add(DTOInterface $dto): void
     {
-        if (! $dto instanceof VegetableDTO) {
-            throw new \InvalidArgumentException('Expected instance of VegetableDTO');
+        if (! $dto instanceof FruitDTO && ! $dto instanceof VegetableDTO) {
+            throw new \InvalidArgumentException('Expected instance of FruitDTO or VegetableDTO');
         }
 
-        $this->collection[] = $this->storage->save(new Vegetable(), $dto);
+        $entityClass = $dto instanceof FruitDTO ? Fruit::class : Vegetable::class;
+
+        $this->collection[] = $this->storage->save(new $entityClass(), $dto);
     }
 
     /**
@@ -41,14 +46,14 @@ class VegetableCollection implements CollectionInterface
      */
     public function remove(int $id): bool
     {
-        $return = $this->storage->delete(new Vegetable(), $id);
+        $return = $this->storage->delete(new Product(), $id);
 
         if (! $return) {
             return false;
         }
 
-        foreach ($this->collection as $key => $vegetable) {
-            if ($vegetable->getId() === $id) {
+        foreach ($this->collection as $key => $product) {
+            if ($product->getId() === $id) {
                 unset($this->collection[$key]);
             }
         }
@@ -58,11 +63,11 @@ class VegetableCollection implements CollectionInterface
 
     /**
      * @throws \RuntimeException
-     * @return EntityInterface[]|Vegetable[]
+     * @return EntityInterface[]|Product[]
      */
     public function list(): array
     {
-        $this->collection = $this->storage->all(new Vegetable());
+        $this->collection = $this->storage->all(new Product());
         return $this->collection;
     }
 
@@ -71,7 +76,7 @@ class VegetableCollection implements CollectionInterface
      * @return EntityInterface[]
      */
     public function filterByName(string $name): array {
-        $filtered = $this->storage->filterByName(new Vegetable(), $name);
+        $filtered = $this->storage->filterByName(new Product(), $name);
         return $filtered;
     }
 
@@ -79,7 +84,7 @@ class VegetableCollection implements CollectionInterface
      * @throws \RuntimeException
      */
     public function getById(int $id): ?EntityInterface {
-        $entity = $this->storage->getById(new Vegetable(), $id);
+        $entity = $this->storage->getById(new Product(), $id);
 
         if ($entity === null) {
             return null;
