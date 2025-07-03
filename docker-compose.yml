@@ -38,6 +38,16 @@ services:
     command: "php -S 0.0.0.0:8080 -t /app/public"
     networks:
       - fruit-and-veg-network
+  app-test:
+    container_name: fruit-and-veg-app-test
+    build:
+      context: ./docker
+      dockerfile: Dockerfile
+    environment:
+      - APP_ENV=test
+    volumes:
+      - ./:/app
+    entrypoint: ./docker/entrypoint-test.sh
 networks:
   fruit-and-veg-network:
 volumes:
