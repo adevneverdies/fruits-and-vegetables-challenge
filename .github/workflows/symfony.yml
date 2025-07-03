@@ -33,17 +33,20 @@ jobs:
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
     - name: Create Database
       run: |
-        mkdir -p data
-        touch data/database.sqlite
+        mkdir -p var/
+        touch var/data.db
     - name: Create cache warmup
       run: php bin/console cache:warmup --env=test
     - name: Check PHPStan
       run : vendor/bin/phpstan analyse --configuration=phpstan.test.dist.neon
     - name: Migrate Database
       env:
-        DATABASE_URL: sqlite:///%kernel.project_dir%/data/database.sqlite
-      run: php bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration
+        DATABASE_URL: sqlite:///%kernel.project_dir%/var/data.db
+      run: |
+        rm -r migrations/*.php
+        php bin/console doctrine:schema:create --no-interaction
+        php bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration
     - name: Execute tests (Unit and Feature tests) via PHPUnit
       env:
-        DATABASE_URL: sqlite:///%kernel.project_dir%/data/database.sqlite
+        DATABASE_URL: sqlite:///%kernel.project_dir%/var/data.db
       run: vendor/bin/phpunit
