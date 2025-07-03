@@ -222,6 +222,21 @@ class ApiController extends AbstractController
         ], 201);
     }
 
+    #[Route('/api/process/json', name: 'api_process_json', methods: ['GET'])]
+    public function processJson(): JsonResponse {
+        $jsonFilePath = __DIR__ . '/../../request.json';
+
+        try {
+            $products = $this->collectionService->addFromFile($jsonFilePath);
+        } catch (\Exception $e) {
+            return $this->json(['error' => $e->getMessage()], 400);
+        }
+
+        return $this->json([
+            'products' => array_map(fn($product) => $product->toArray(), $products),
+        ]);
+    }
+
     #[Route('/api/health', name: 'api_health_check', methods: ['GET'])]
     public function healthCheck(): JsonResponse
     {

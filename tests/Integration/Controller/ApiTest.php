@@ -126,6 +126,15 @@ class ApiTest extends WebTestCase
         $this->assertEquals('Banana', $responseData['fruits'][0]['name'], 'Expected filtered fruit name to be Banana');
     }
 
+    public function testProcessJson(): void {
+        $this->client->request('GET', '/api/process/json');
+        $this->assertResponseIsSuccessful();
+
+        $responseData = json_decode($this->client->getResponse()->getContent(), true);
+        $this->assertArrayHasKey('products', $responseData);
+        $this->assertTrue(count($responseData['products']) > 0);
+    }
+
     public function testApiHealthcheck(): void
     {
         $this->client->request('GET', '/api/health');
