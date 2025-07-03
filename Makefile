@@ -28,7 +28,7 @@ test:
 	$(DOCKER_COMPOSE) run -e APP_ENV=$(APP_ENV) app-test vendor/bin/phpunit
 
 phpstan:
-	$(DOCKER_COMPOSE) run -e APP_ENV=$(APP_ENV) app-test vendor/bin/phpstan analyse -c /app/phpstan.test.dist.neon
+	$(DOCKER_COMPOSE) run -e APP_ENV=$(APP_ENV) app-test vendor/bin/phpstan analyse -c /app/phpstan.test.dist.neon --memory-limit=500M
 
 phpcsfixer:
 	$(DOCKER_COMPOSE) run -e APP_ENV=$(APP_ENV) app-test vendor/bin/ecs

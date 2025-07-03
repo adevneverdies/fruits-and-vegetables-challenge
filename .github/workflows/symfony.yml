@@ -38,7 +38,7 @@ jobs:
     - name: Create cache warmup
       run: php bin/console cache:warmup --env=test
     - name: Check PHPStan
-      run : vendor/bin/phpstan analyse --configuration=phpstan.test.dist.neon
+      run : vendor/bin/phpstan analyse --configuration=phpstan.test.dist.neon --memory-limit=500M
     - name: Migrate Database
       env:
         DATABASE_URL: sqlite:///%kernel.project_dir%/var/data.db

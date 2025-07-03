@@ -68,6 +68,15 @@
     "myclabs/deep-copy": {
         "version": "1.11.0"
     },
+    "nelmio/api-doc-bundle": {
+        "version": "4.26",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "3.0",
+            "ref": "c8e0c38e1a280ab9e37587a8fa32b251d5bc1c94"
+        }
+    },
     "nikic/php-parser": {
         "version": "v4.13.2"
     },
@@ -348,6 +357,19 @@
     "symfony/string": {
         "version": "v6.0.3"
     },
+    "symfony/twig-bundle": {
+        "version": "6.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "5.4",
+            "ref": "bb2178c57eee79e6be0b297aa96fc0c0def81387"
+        },
+        "files": [
+            "config/packages/twig.yaml",
+            "templates/base.html.twig"
+        ]
+    },
     "symfony/var-dumper": {
         "version": "v6.0.6"
     },
@@ -359,6 +381,9 @@
     },
     "theseer/tokenizer": {
         "version": "1.2.1"
+    },
+    "twig/extra-bundle": {
+        "version": "v3.8.0"
     },
     "zenstruck/foundry": {
         "version": "1.38",

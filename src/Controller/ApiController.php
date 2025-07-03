@@ -4,7 +4,12 @@ namespace App\Controller;
 
 use App\DTO\FruitDTO;
 use App\DTO\VegetableDTO;
+use App\Entity\Fruit;
+use App\Entity\Product;
+use App\Entity\Vegetable;
 use App\Service\CollectionService;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,6 +23,28 @@ class ApiController extends AbstractController
     {}
 
     #[Route('/api/fruits', name: 'api_fruit_list', methods: ['GET'])]
+    #[OA\Get(description: 'List of Fruits')]
+    #[OA\QueryParameter(
+        name: 'name',
+        in: 'query',
+        required: false,
+        description: 'Optional name to search',
+        schema: new OA\Schema(type: 'string', default: '')
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Return list of fruits',
+        content: new OA\JsonContent(
+            type: 'object',
+            properties: [
+                new OA\Property(
+                    property: 'fruits',
+                    type: 'array',
+                    items: new OA\Items(ref: new Model(type: Fruit::class))
+                )
+            ]
+        )
+    )]
     public function fruits(Request $request): JsonResponse
     {
         $name = $request->query->get('name', '');
@@ -42,6 +69,28 @@ class ApiController extends AbstractController
     }
 
     #[Route('/api/vegetables', name: 'api_vegetables_list', methods: ['GET'])]
+    #[OA\Get(description: 'List of Vegetables')]
+    #[OA\QueryParameter(
+        name: 'name',
+        in: 'query',
+        required: false,
+        description: 'Optional name to search',
+        schema: new OA\Schema(type: 'string', default: '')
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Return list of vegtables',
+        content: new OA\JsonContent(
+            type: 'object',
+            properties: [
+                new OA\Property(
+                    property: 'vegetables',
+                    type: 'array',
+                    items: new OA\Items(ref: new Model(type: Vegetable::class))
+                )
+            ]
+        )
+    )]
     public function vegetables(Request $request): JsonResponse
     {
         $name = $request->query->get('name', '');
@@ -66,6 +115,28 @@ class ApiController extends AbstractController
     }
 
     #[Route('/api/products', name: 'api_prodcuts_list', methods: ['GET'])]
+    #[OA\Get(description: 'List of Products Fruits|Vegetables')]
+    #[OA\QueryParameter(
+        name: 'name',
+        in: 'query',
+        required: false,
+        description: 'Optional name to search',
+        schema: new OA\Schema(type: 'string', default: '')
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Return list of products',
+        content: new OA\JsonContent(
+            type: 'object',
+            properties: [
+                new OA\Property(
+                    property: 'products',
+                    type: 'array',
+                    items: new OA\Items(ref: new Model(type: Product::class))
+                )
+            ]
+        )
+    )]
     public function products(Request $request): JsonResponse
     {
         $name = $request->query->get('name', '');        
@@ -90,6 +161,21 @@ class ApiController extends AbstractController
     }
 
     #[Route('/api/fruits/{id}', name: 'api_fruit_get', methods: ['GET'])]
+    #[OA\Get(description: 'Get a Fruit by id')]
+    #[OA\Response(
+        response: 200,
+        description: 'Return a Fruit',
+        content: new OA\JsonContent(
+            type: 'object',
+            properties: [
+                new OA\Property(
+                    property: 'fruit',
+                    ref: new Model(type: Fruit::class)
+                )
+
+            ]
+        )
+    )]
     public function getFruit(int $id): JsonResponse
     {
         try {
@@ -111,6 +197,21 @@ class ApiController extends AbstractController
     }
 
     #[Route('/api/vegetables/{id}', name: 'api_vegetable_get', methods: ['GET'])]
+    #[OA\Get(description: 'Get a Vegetable by id')]
+    #[OA\Response(
+        response: 200,
+        description: 'Return a Vegetable',
+        content: new OA\JsonContent(
+            type: 'object',
+            properties: [
+                new OA\Property(
+                    property: 'vegetable',
+                    ref: new Model(type: Vegetable::class)
+                )
+
+            ]
+        )
+    )]
     public function getVegetable(int $id): JsonResponse
     {
         try {
@@ -132,6 +233,21 @@ class ApiController extends AbstractController
     }
 
     #[Route('/api/products/{id}', name: 'api_product_get', methods: ['GET'])]
+    #[OA\Get(description: 'Get a Product by id')]
+    #[OA\Response(
+        response: 200,
+        description: 'Return a Product',
+        content: new OA\JsonContent(
+            type: 'object',
+            properties: [
+                new OA\Property(
+                    property: 'product',
+                    ref: new Model(type: Product::class)
+                )
+
+            ]
+        )
+    )]
     public function getProduct(int $id): JsonResponse
     {
         try {
@@ -151,6 +267,30 @@ class ApiController extends AbstractController
     }
 
     #[Route('/api/fruits', name: 'api_fruit_create', methods: ['POST'], defaults: ['_format' => 'json'])]
+    #[OA\Post(description: 'Create a fruit')]
+    #[OA\RequestBody(
+        required: true,
+        content: new OA\JsonContent(
+            type: 'object',
+            properties: [
+                new OA\Property(property: 'name', type: 'string', example: 'Carrot'),
+                new OA\Property(property: 'quantity', type: 'integer', example: 5),
+                new OA\Property(property: 'unit', type: 'string', example: 'g')
+            ]
+        )
+    )]
+    #[OA\Response(
+        response: 201,
+        description: 'Successful',
+        content: new OA\JsonContent(
+            type: 'object',
+            properties: [
+                    new OA\Property(property: 'status', type: 'string', example: 'success'),
+                    new OA\Property(property: 'message', type: 'string', example: 'Fruit created successfully')
+                ]
+        )
+    )
+    ]
     public function createFruit(Request $request): JsonResponse
     {
 
@@ -190,6 +330,30 @@ class ApiController extends AbstractController
     }
 
     #[Route('/api/vegetables', name: 'api_vegetable_create', methods: ['POST'], defaults: ['_format' => 'json'])]
+    #[OA\Post(description: 'Create a vagatable')]
+    #[OA\RequestBody(
+        required: true,
+        content: new OA\JsonContent(
+            type: 'object',
+            properties: [
+                new OA\Property(property: 'name', type: 'string', example: 'Carrot'),
+                new OA\Property(property: 'quantity', type: 'integer', example: 5),
+                new OA\Property(property: 'unit', type: 'string', example: 'g')
+            ]
+        )
+    )]
+    #[OA\Response(
+        response: 201,
+        description: 'Successful',
+        content: new OA\JsonContent(
+            type: 'object',
+            properties: [
+                    new OA\Property(property: 'status', type: 'string', example: 'success'),
+                    new OA\Property(property: 'message', type: 'string', example: 'Vegetable created successfully')
+                ]
+        )
+    )
+    ]
     public function createVegetable(Request $request): JsonResponse
     {
         $jsonContent = $request->getContent();
@@ -223,6 +387,21 @@ class ApiController extends AbstractController
     }
 
     #[Route('/api/process/json', name: 'api_process_json', methods: ['GET'])]
+    #[OA\Get(description: 'Process json file')]
+    #[OA\Response(
+        response: 200,
+        description: 'Return list of products',
+        content: new OA\JsonContent(
+            type: 'object',
+            properties: [
+                new OA\Property(
+                    property: 'products',
+                    type: 'array',
+                    items: new OA\Items(ref: new Model(type: Product::class))
+                )
+            ]
+        )
+    )]
     public function processJson(): JsonResponse {
         $jsonFilePath = __DIR__ . '/../../request.json';
 
@@ -238,6 +417,18 @@ class ApiController extends AbstractController
     }
 
     #[Route('/api/health', name: 'api_health_check', methods: ['GET'])]
+    #[OA\Response(
+        response: 200,
+        description: 'API is healthy',
+        content: new OA\JsonContent(
+            type: 'object',
+            properties: [
+                    new OA\Property(property: 'status', type: 'string', example: 'ok'),
+                    new OA\Property(property: 'message', type: 'string', example: 'API is healthy')
+                ]
+        )
+    )
+    ]
     public function healthCheck(): JsonResponse
     {
         return $this->json([
