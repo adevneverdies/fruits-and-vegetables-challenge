@@ -14,6 +14,17 @@ class ProductDTO implements DTOInterface
     {
     }
 
+    public function convertUnitToGrams(): void
+    {
+        if ($this->unit === 'kg') {
+            $this->quantity *= 1000;
+            $this->unit = 'g';
+        } elseif ($this->unit === 'mg') {
+            $this->quantity /= 1000;
+            $this->unit = 'g';
+        }
+    }
+
     public function toArray(): array
     {
         return [
@@ -46,5 +57,24 @@ class ProductDTO implements DTOInterface
     public function getType(): string
     {
         return 'product';
+    }
+
+    /**
+     * @return array<string>
+     */
+    public function validate(): array
+    {
+        $errors = [];
+        if (empty($this->name)) {
+            $errors[] = 'Name cannot be empty';
+        }
+        if ($this->quantity <= 0) {
+            $errors[] = 'Quantity must be greater than zero';
+        }
+        if (! in_array($this->unit, ['g', 'kg', 'mg'])) {
+             $errors[] = 'Unit must be one of: g, kg, mg';
+        }
+
+        return $errors;
     }
 }

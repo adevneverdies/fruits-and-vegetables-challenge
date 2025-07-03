@@ -17,4 +17,15 @@ interface CollectionInterface
      * @return EntityInterface[]
      */
     public function list(): array;
+
+    /**
+     * @throws \RuntimeException
+     * @return EntityInterface[]
+     */
+    public function filterByName(string $name): array;
+
+    /**
+     * @throws \RuntimeException
+     */
+    public function getById(int $id): ?EntityInterface;
 }
