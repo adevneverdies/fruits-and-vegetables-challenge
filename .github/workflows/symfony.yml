@@ -17,7 +17,7 @@ jobs:
     steps:
     - uses: shivammathur/setup-php@2cb9b829437ee246e9b3cac53555a39208ca6d28
       with:
-        php-version: '8.3'
+        php-version: '8.2.28'
     - uses: actions/checkout@v4
     - name: Copy .env.test.local
       run: php -r "file_exists('.env.test.local') || copy('.env.test', '.env.test.local');"
@@ -35,6 +35,10 @@ jobs:
       run: |
         mkdir -p data
         touch data/database.sqlite
+    - name: Check env version
+      run: |
+        vendor/bin/phpstan --version
+        php -v
     - name: Create cache warmup
       run: php bin/console cache:warmup --env=test
     - name: Check PHPStan
